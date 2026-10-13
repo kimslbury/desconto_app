@@ -1,0 +1,2 @@
+"""Implementações concretas de armazenamento."""
+

@@ -1,26 +1,26 @@
-from src.controllers.pedido_controller import PedidoController
-from src.repositories.pedido_repository import PedidoRepository
-from src.services.pedido_service import PedidoService
-from src.database.connection import DatabaseConnection
-from src.models.pedido import Pedido
-from src.models.desconto import DescontoNormal, DescontoVIP, DescontoPremium
+from src.app.adapters.controllers.pedido_controller import PedidoController
+from src.app.adapters.repositories.pedido_repository import PedidoRepository
+from src.app.dtos.criar_pedido_input_dto import CriarPedidoInputDTO
+from src.app.frameworks.database.memory_database import MemoryDatabase
+from src.app.presenters.pedido_presenter import PedidoPresenter
+from src.app.use_cases.criar_pedido import CriarPedido
 
 
 if __name__ == "__main__":
-    database = DatabaseConnection()
-    repo = PedidoRepository(database)
-    service = PedidoService(repo)
-    controller = PedidoController(service)
+    database = MemoryDatabase()
+    gateway = PedidoRepository(database)
+    criar_pedido = CriarPedido(gateway)
+    controller = PedidoController(criar_pedido)
+    presenter = PedidoPresenter()
 
-    pedido1 = Pedido("Cliente 1", DescontoNormal())
-    pedido1.valor_original = 100.0
-    pedido2 = Pedido("Cliente 2", DescontoVIP())
-    pedido2.valor_original = 100.0
-    pedido3 = Pedido("Cliente 3", DescontoPremium())
-    pedido3.valor_original = 100.0
+    pedidos = [
+        CriarPedidoInputDTO("Cliente 1", 100.0, "normal"),
+        CriarPedidoInputDTO("Cliente 2", 100.0, "vip"),
+        CriarPedidoInputDTO("Cliente 3", 100.0, "premium"),
+    ]
 
-    controller.adicionar_pedido(pedido1)
-    controller.adicionar_pedido(pedido2)
-    controller.adicionar_pedido(pedido3)
+    for dados in pedidos:
+        controller.criar(dados)
 
-    controller.processar_pedidos()
+    for pedido in gateway.listar():
+        print(presenter.apresentar(pedido))

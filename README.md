@@ -4,11 +4,13 @@ Sistema de pedidos para aplicar diferentes tipos de desconto.
 
 ## Estrutura
 
-- `src/controllers`: camada responsável por receber as entradas do usuário.
-- `src/services`: camada que contém as regras de negócio.
-- `src/repositories`: camada responsável por abstrair o acesso aos dados.
-- `src/database`: camada de infraestrutura para conexão com o banco de dados.
-- `src/models`: modelos que representam os dados da aplicação.
+- `src/app/entities`: entidades e regras essenciais do negócio.
+- `src/app/use_cases`: casos de uso da aplicação.
+- `src/app/gateways`: contratos para salvar e listar pedidos.
+- `src/app/adapters`: controllers e implementações de repositórios.
+- `src/app/frameworks/database`: armazenamento em memória.
+- `src/app/dtos` e `src/app/presenters`: entrada e apresentação dos dados.
+- `src_antigo`: implementação anterior em arquitetura de camadas.
 
 ## Executar
 
