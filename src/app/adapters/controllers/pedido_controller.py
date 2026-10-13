@@ -1,16 +1,23 @@
-from src.app.dtos.criar_pedido_input_dto import CriarPedidoInputDTO
 from src.app.entities.pedido import Pedido
 from src.app.use_cases.criar_pedido import CriarPedido
 
 
 class PedidoController:
-    def __init__(self, criar_pedido: CriarPedido):
-        self.criar_pedido = criar_pedido
+    def __init__(self, criar_pedido_use_case: CriarPedido):
+        self.criar_pedido_use_case = criar_pedido_use_case
 
-    def criar(self, dados: CriarPedidoInputDTO) -> Pedido:
-        return self.criar_pedido.executar(
-            cliente=dados.cliente,
-            valor_original=dados.valor_original,
-            tipo_desconto=dados.tipo_desconto,
+    def criar_pedido(
+        self,
+        cliente: str,
+        valor_original: float,
+        tipo_desconto: str,
+    ) -> Pedido:
+        return self.criar_pedido_use_case.executar(
+            cliente,
+            valor_original,
+            tipo_desconto,
         )
+
+    def listar_pedidos(self) -> list[Pedido]:
+        return self.criar_pedido_use_case.listar_pedidos()
 

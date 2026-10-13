@@ -27,3 +27,6 @@ class CriarPedido:
         self.pedido_gateway.salvar(pedido)
         return pedido
 
+    def listar_pedidos(self) -> list[Pedido]:
+        return self.pedido_gateway.listar()
+
