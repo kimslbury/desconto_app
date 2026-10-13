@@ -1,26 +1,24 @@
 from src.app.adapters.controllers.pedido_controller import PedidoController
-from src.app.adapters.repositories.pedido_repository import PedidoRepository
-from src.app.dtos.criar_pedido_input_dto import CriarPedidoInputDTO
+from src.app.adapters.repositories.memory_pedido_repository import MemoryPedidoRepository
 from src.app.frameworks.database.memory_database import MemoryDatabase
-from src.app.presenters.pedido_presenter import PedidoPresenter
 from src.app.use_cases.criar_pedido import CriarPedido
 
 
-if __name__ == "__main__":
+def main() -> None:
     database = MemoryDatabase()
-    gateway = PedidoRepository(database)
-    criar_pedido = CriarPedido(gateway)
-    controller = PedidoController(criar_pedido)
-    presenter = PedidoPresenter()
+    pedido_gateway = MemoryPedidoRepository(database)
+    criar_pedido_use_case = CriarPedido(pedido_gateway)
+    controller = PedidoController(criar_pedido_use_case)
 
-    pedidos = [
-        CriarPedidoInputDTO("Cliente 1", 100.0, "normal"),
-        CriarPedidoInputDTO("Cliente 2", 100.0, "vip"),
-        CriarPedidoInputDTO("Cliente 3", 100.0, "premium"),
-    ]
+    pedido1 = controller.criar_pedido("Cliente A", 100.0, "normal")
+    pedido2 = controller.criar_pedido("Cliente B", 100.0, "vip")
+    pedido3 = controller.criar_pedido("Cliente C", 100.0, "premium")
 
-    for dados in pedidos:
-        controller.criar(dados)
+    print("Pedidos criados:")
+    print(pedido1.cliente, pedido1.valor_original, pedido1.valor_final())
+    print(pedido2.cliente, pedido2.valor_original, pedido2.valor_final())
+    print(pedido3.cliente, pedido3.valor_original, pedido3.valor_final())
 
-    for pedido in gateway.listar():
-        print(presenter.apresentar(pedido))
+
+if __name__ == "__main__":
+    main()
